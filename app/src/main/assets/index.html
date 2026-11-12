@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:dark;background:#0c1613}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Grass Cutting Daily Log</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: single-column app, dark theme only, navy header, segmented tabs, stacked form cards */
+:root {
+  --bg: #0c1613;
+  --card: #14231f;
+  --card-2: #101d19;
+  --line: #243832;
+  --fg: #e6f2ed;
+  --muted: #8aa89d;
+  --accent: #10b981;
+  --accent-fg: #04231a;
+  --accent-soft: #0f3a2c;
+  --danger: #fb7185;
+  --danger-soft: #3b1420;
+  --head-a: #07121d;
+  --head-b: #0b2d28;
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.4;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 28px;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 520px; margin: 0 auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Header */
+.head {
+  margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0 calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding: 18px max(16px, env(safe-area-inset-right, 0px)) 18px max(16px, env(safe-area-inset-left, 0px));
+  background: linear-gradient(120deg, var(--head-a), var(--head-b)); color: #f2fbf7;
+}
+.head-in { max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.logo { flex: none; width: 46px; height: 46px; border-radius: 12px; overflow: hidden; display: block; }
+.logo img { display: block; width: 100%; height: 100%; }
+.head-txt { min-width: 0; flex: 1; }
+.tagrow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.tag { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,.14); border: 1px solid rgba(16,185,129,.4); padding: 2px 8px; border-radius: 999px; }
+.sub { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #8fb3a7; }
+.head h1 { margin: 0; font-size: 20px; line-height: 1.15; font-weight: 700; text-wrap: balance; }
+.iconbtn { flex: none; width: 42px; height: 42px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: #cfe6dd; cursor: pointer; display: grid; place-items: center; }
+
+/* Tabs */
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 5px; margin: 14px 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.tab { border: 0; background: transparent; color: var(--muted); font-weight: 600; padding: 8px 4px; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 56px; font-size: 13px; line-height: 1.15; text-align: center; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-fg); }
+
+/* Cards and fields */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-bottom: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.lblrow { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+label, .lbl { font-weight: 600; font-size: 14px; }
+.chip { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent); }
+.hint { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+input, select, textarea { width: 100%; min-height: 46px; padding: 10px 14px; background: var(--card-2); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+textarea { resize: vertical; min-height: 64px; }
+input[type="text"], input[type="number"] { font-family: var(--mono); }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: .75; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sec { background: var(--card-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin-bottom: 14px; }
+.sec-h { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: 14px; }
+.sec-h svg { color: var(--accent); flex: none; }
+.sec-h .hint { margin-left: auto; text-transform: none; letter-spacing: 0; text-align: right; }
+
+/* Structures */
+.st-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 4px; }
+.st-head .t { display: flex; gap: 8px; min-width: 0; }
+.st-head svg { color: var(--danger); flex: none; margin-top: 2px; }
+.st-head b { display: block; font-size: 15px; }
+.st-head span { font-size: 13px; color: var(--muted); }
+.btn-add { flex: none; display: flex; align-items: center; gap: 6px; background: var(--danger-soft); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent); border-radius: 12px; padding: 10px 14px; font-weight: 700; cursor: pointer; min-height: 44px; }
+.empty { margin-top: 12px; border: 1px dashed var(--line); border-radius: 12px; padding: 14px; text-align: center; color: var(--muted); font-style: italic; font-size: 13px; }
+.st-item { margin-top: 10px; border: 1px solid var(--line); border-radius: 14px; padding: 10px; background: var(--card); }
+.st-top { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 8px; }
+.st-top select { min-height: 42px; }
+.st-del { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--danger); cursor: pointer; display: grid; place-items: center; }
+.st-len { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 8px; text-align: right; }
+
+.lenrow { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; }
+.lenrow .unit { font-family: var(--mono); color: var(--muted); font-size: 13px; }
+.btn-tpl { border: 1px solid var(--line); background: transparent; color: var(--accent); font-weight: 600; font-size: 13px; border-radius: 12px; padding: 0 12px; min-height: 46px; cursor: pointer; }
+.tplform { display: grid; grid-template-columns: 1fr 110px; gap: 10px; margin-bottom: 10px; }
+.tplform .btn { grid-column: 1 / -1; min-height: 46px; font-size: 15px; }
+.tpl-item { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; border: 1px solid var(--line); border-radius: 14px; padding: 8px 8px 8px 12px; margin-top: 8px; background: var(--card-2); }
+.tpl-item b { display: block; overflow-wrap: anywhere; }
+.tpl-item small { font-family: var(--mono); color: var(--muted); font-size: 12px; }
+.tpl-add { border: 0; background: var(--accent); color: var(--accent-fg); font-weight: 700; border-radius: 12px; padding: 0 14px; min-height: 42px; cursor: pointer; }
+.gengrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+.gengrid label { align-self: end; display: flex; align-items: center; gap: 6px; }
+.gengrid label svg { flex: none; color: var(--accent); }
+.entry .e-date { font-size: 16px; }
+.entry .ln { margin-top: 5px; font-size: 14px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+/* Result */
+.res { background: linear-gradient(135deg, var(--head-a), var(--head-b)); color: #eaf7f1; border-radius: 18px; padding: 16px; margin-bottom: 14px; }
+.res-main { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.res-main .big { font-family: var(--mono); font-size: 34px; font-weight: 600; color: #34d399; font-variant-numeric: tabular-nums; }
+.res-main .u { color: #9fc4b7; font-size: 14px; }
+.res-cap { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #8fb3a7; margin-bottom: 4px; }
+.res dl { margin: 14px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.14); }
+.res dt { color: #9fc4b7; }
+.res dd { margin: 0; font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.err { color: var(--danger); font-size: 13px; margin: -4px 0 12px; }
+
+.btn { width: 100%; min-height: 52px; border: 0; border-radius: 14px; background: var(--accent); color: var(--accent-fg); font-weight: 700; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn.alt { background: var(--card); color: var(--fg); border: 1px solid var(--line); }
+.btn.tg { background: #128c7e; color: #fff; text-decoration: none; }
+.btnrow { display: grid; gap: 10px; }
+.btnrow.two { grid-template-columns: 1fr 1fr; }
+
+/* Log */
+.sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.sum div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px; min-width: 0; }
+.sum small { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.sum b { font-family: var(--mono); font-size: 16px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.entry { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin-bottom: 10px; }
+.entry-h { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.entry-h b { font-size: 15px; }
+.entry .meta { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
+.entry .vals { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 13px; }
+.entry .vals span { color: var(--muted); }
+.entry .vals b { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.entry .area { color: var(--accent); }
+.entry .note { margin-top: 8px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.confirm { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.confirm .btn { min-height: 44px; font-size: 14px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 11px 18px; border-radius: 999px; font-weight: 600; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); }
+.foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px; }
+.help { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin-bottom: 14px; font-size: 14px; }
+.help ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .tab, .btn { transition: background .15s, transform .1s; } .btn:active { transform: scale(.98); } }
+</style>
+
+<div class="head"><div class="head-in">
+  <div class="logo" aria-hidden="true"><img src="data:image/png;base64,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" alt="" width="46" height="46"></div>
+  <div class="head-txt">
+    <div class="tagrow"><span class="tag">N8 Expressway</span><span class="sub">Site Operations</span></div>
+    <h1>Grass Cutting Daily Log</h1>
+  </div>
+  <button class="iconbtn" id="helpBtn" type="button" aria-label="How it works" aria-expanded="false">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.3a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1.9-1.1 1.8"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>
+  </button>
+</div></div>
+
+<div class="wrap">
+  <div class="help" id="help" hidden>
+    <b>How it works</b>
+    <ul>
+      <li>Enter chainage as <span class="hint">15+000</span> or in km as <span class="hint">15.0</span>.</li>
+      <li>Add bridges, culverts or paved sections to subtract them from the cut length.</li>
+      <li>Area = (length minus structures) × cutting width.</li>
+      <li>Saved entries stay in this app on your device. Send the day's report to a Telegram chat from the Work Log tab.</li>
+    </ul>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tabCalc" aria-selected="true" aria-controls="viewCalc" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm1 2v4h10V4H7Zm1 7a1.2 1.2 0 1 0 0 2.4A1.2 1.2 0 0 0 8 11Zm4 0a1.2 1.2 0 1 0 0 2.4A1.2 1.2 0 0 0 12 11Zm4 0a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM8 15.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Zm4 0a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Zm4 0a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Z"/></svg>
+      Calculator
+    </button>
+    <button class="tab" role="tab" id="tabLog" aria-selected="false" aria-controls="viewLog" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+      <span>Work Log (<span id="logCount">0</span>)</span>
+    </button>
+    <button class="tab" role="tab" id="tabTpl" aria-selected="false" aria-controls="viewTpl" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14a1 1 0 0 1 1 1v17l-8-4-8 4V4a1 1 0 0 1 1-1Z"/></svg>
+      <span>Templates</span>
+    </button>
+  </div>
+
+  <!-- Calculator -->
+  <section id="viewCalc" role="tabpanel" aria-labelledby="tabCalc">
+    <div class="card">
+      <div class="field">
+        <div class="lblrow"><label for="date">Date</label><span class="chip" id="dateChip"></span></div>
+        <input type="date" id="date">
+        <div class="hint" id="reportDate"></div>
+      </div>
+      <div class="field">
+        <div class="lblrow"><label for="loc">Location</label></div>
+        <select id="loc">
+          <option>Dhaleshwari</option>
+          <option>Bhanga</option>
+        </select>
+      </div>
+      <div class="row2">
+      <div class="field">
+        <div class="lblrow"><label for="zone">Direction</label><span class="chip" id="routeChip" hidden>N8 Express</span></div>
+        <select id="zone"></select>
+      </div>
+      <div class="field">
+        <div class="lblrow"><label for="dirType">Direction Type</label></div>
+        <select id="dirType">
+          <option>Median</option>
+          <option>Shoulder</option>
+          <option>Service Road</option>
+          <option>Custom</option>
+        </select>
+      </div>
+      </div>
+      <div class="field" id="dtCustomWrap" hidden>
+        <label for="dtCustom">Custom Direction Type</label>
+        <input type="text" id="dtCustom" autocomplete="off" placeholder="TYPE A DIRECTION TYPE" style="font-family:var(--font)">
+      </div>
+
+      <div class="sec">
+        <div class="sec-h">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20h18v-2H3v2Zm1-4h2V8H4v8Zm4 0h2V8H8v8Zm4 0h2V8h-2v8Zm4 0h2V8h-2v8ZM3 6l9-4 9 4v2H3V6Z" opacity="0"/><path d="M4 4h4v8H4V4Zm6 0h4v8h-4V4Zm6 0h4v8h-4V4ZM3 14h18v2H3v-2Zm0 4h18v2H3v-2Z"/></svg>
+          Chainage <span class="hint">e.g. 15+000 or 15.0</span>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="startCh">Start Chainage</label><input type="text" id="startCh" inputmode="text" autocomplete="off" placeholder="E.G. 15+000"></div>
+          <div class="field"><label for="endCh">End Chainage</label><input type="text" id="endCh" inputmode="text" autocomplete="off" placeholder="E.G. 20+000"></div>
+        </div>
+        <div class="st-head">
+          <div class="t">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M2 5h20v3H2V5Zm2 4h3v6H4V9Zm13 0h3v6h-3V9ZM2 16h20v3H2v-3Zm8-7h4v6h-4V9Z"/></svg>
+            <div><b>Excluded Structures</b><span>Exclude bridges/underpass/structure</span></div>
+          </div>
+          <button type="button" class="btn-add" id="addSt">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Add Structure
+          </button>
+        </div>
+        <div id="stList"></div>
+        <datalist id="tplOptions"></datalist>
+      </div>
+
+      <div class="field"><label for="width">Average Width (m)</label><input type="number" id="width" inputmode="decimal" min="0" step="0.1" value="3.0"></div>
+      <div class="field"><label for="notes">Remarks</label><textarea id="notes" placeholder="Weather, delays, equipment issues"></textarea></div>
+      <div class="sec" style="margin-bottom:0">
+        <div class="gengrid">
+          <label for="gen"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg><span>Generator</span></label>
+          <label for="genHrs">Working Hours</label>
+          <select id="gen">
+            <option value="">Select generator</option>
+            <option>Generator 1</option>
+            <option>Generator 2</option>
+            <option>Generator 3</option>
+            <option>Generator 4</option>
+            <option>Generator 5</option>
+          </select>
+          <input type="number" id="genHrs" inputmode="decimal" min="0" max="24" step="0.5" placeholder="E.G. 8">
+        </div>
+      </div>
+    </div>
+
+    <div class="res" aria-live="polite">
+      <div class="res-cap">Working area</div>
+      <div class="res-main"><span class="big" id="rArea">0</span><span class="u">sqm</span></div>
+      <dl>
+        <dt>Gross length</dt><dd id="rGross">0 m</dd>
+        <dt>Excluded structures</dt><dd id="rExcl">0 m</dd>
+        <dt>Net length</dt><dd id="rNet">0 m</dd>
+        <dt>Chainage</dt><dd id="rCh">—</dd>
+      </dl>
+    </div>
+    <div class="err" id="err" hidden></div>
+    <button class="btn" id="saveBtn" type="button" disabled>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>
+      Save to Work Log
+    </button>
+  </section>
+
+  <!-- Log -->
+  <section id="viewLog" role="tabpanel" aria-labelledby="tabLog" hidden>
+    <div class="sum">
+      <div><small>Entries</small><b id="sCount">0</b></div>
+      <div><small>Length</small><b id="sLen">0 m</b></div>
+      <div><small>Area</small><b id="sArea">0 sqm</b></div>
+    </div>
+    <div id="logList"></div>
+    <div class="btnrow" id="logActions" style="margin-top:14px">
+      <a class="btn tg" id="tgShare" href="#" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Send Report to WhatsApp
+      </a>
+      <div class="btnrow two">
+        <button class="btn alt" id="copyBtn" type="button">Copy Report</button>
+        <button class="btn alt" id="clearBtn" type="button">Clear Log</button>
+      </div>
+      <div class="confirm" id="clearConfirm" hidden>
+        <button class="btn alt" id="clearNo" type="button">Keep entries</button>
+        <button class="btn" id="clearYes" type="button" style="background:var(--danger);color:#fff">Delete all</button>
+      </div>
+    </div>
+  </section>
+  <!-- Templates -->
+  <section id="viewTpl" role="tabpanel" aria-labelledby="tabTpl" hidden>
+    <div class="card">
+      <div class="sec-h">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3h14a1 1 0 0 1 1 1v17l-8-4-8 4V4a1 1 0 0 1 1-1Z"/></svg>
+        Templates
+      </div>
+      <div class="tplform">
+        <input type="text" id="tplName" autocomplete="off" aria-label="Bridge name" placeholder="BRIDGE NAME" style="font-family:var(--font)">
+        <input type="number" id="tplLen" inputmode="decimal" min="0" step="0.1" aria-label="Bridge length in metres" placeholder="LENGTH (M)">
+        <button type="button" class="btn" id="tplSave">Save Template</button>
+      </div>
+      <div id="tplList"></div>
+    </div>
+  </section>
+  <div class="foot">N8 Expressway · Site Operations</div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var KEY = 'n8-grass-log-v1';
+  var entries = [];
+  var structures = [];
+  var STRUCT_TYPES = ['Bridge', 'Culvert', 'Flyover', 'Underpass', 'Paved segment', 'Toll plaza'];
+
+  /* Telegram Mini App hook: only active when opened inside Telegram */
+  try {
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) {
+      tg.ready(); tg.expand();
+      var p = tg.themeParams || {}, r = document.documentElement.style;
+      if (p.bg_color) r.setProperty('--bg', p.bg_color);
+      if (p.secondary_bg_color) r.setProperty('--card-2', p.secondary_bg_color);
+      if (p.text_color) r.setProperty('--fg', p.text_color);
+      if (p.hint_color) r.setProperty('--muted', p.hint_color);
+    }
+  } catch (e) {}
+
+  function load() { try { var s = localStorage.getItem(KEY); if (s) entries = JSON.parse(s) || []; } catch (e) { entries = []; } }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(entries)); } catch (e) {} }
+
+  /* Chainage: "15+000" = 15 km + 0 m; "15.0" = 15.0 km. Returns metres or null. */
+  function parseCh(v) {
+    v = String(v || '').trim().replace(/\s+/g, '').replace(/,/g, '.');
+    if (!v) return null;
+    var m;
+    if ((m = v.match(/^(\d+)\+(\d{1,3}(?:\.\d+)?)$/))) return parseInt(m[1], 10) * 1000 + parseFloat(m[2]);
+    if (/^\d+(\.\d+)?$/.test(v)) return parseFloat(v) * 1000;
+    return NaN;
+  }
+  function fmtCh(m) { var k = Math.floor(m / 1000), r = Math.round(m - k * 1000); if (r === 1000) { k++; r = 0; } return k + '+' + String(r).padStart(3, '0'); }
+  function fmtN(n, d) { return Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: d == null ? 1 : d }); }
+  function fmtDate(iso) { if (!iso) return ''; var a = iso.split('-'); return a[2] + '/' + a[1] + '/' + a[0]; }
+  function todayISO() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2200);
+  }
+
+  /* Structures UI */
+  function findTpl(name) {
+    var n = String(name || '').trim().toLowerCase();
+    return n ? allTpls().filter(function (t) { return t.name.toLowerCase() === n; })[0] || null : null;
+  }
+  function renderStructures() {
+    var host = $('stList');
+    if (!structures.length) {
+      host.innerHTML = '';
+      return;
+    }
+    host.innerHTML = structures.map(function (s, i) {
+      var showSave = !!String(s.name || '').trim() && !findTpl(s.name);
+      return '<div class="st-item" data-i="' + i + '">' +
+        '<div class="st-top"><input type="text" list="tplOptions" aria-label="Structure name, pick from saved bridges" data-k="name" placeholder="TYPE OR PICK A BRIDGE" value="' + esc(s.name) + '" autocomplete="off" style="font-family:var(--font)">' +
+        '<button class="st-del" type="button" aria-label="Remove structure" data-del="' + i + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3"/></svg></button></div>' +
+        '<div class="lenrow"><input type="number" inputmode="decimal" min="0" step="0.1" aria-label="Structure length in metres" data-k="len" placeholder="LENGTH (M)" value="' + esc(s.len) + '"><span class="unit">m</span>' +
+        '<button type="button" class="btn-tpl" data-tpl="' + i + '"' + (showSave ? '' : ' hidden') + '>Save template</button></div></div>';
+    }).join('');
+  }
+
+  var calc = { ok: false };
+  function compute() {
+    var s = parseCh($('startCh').value), e = parseCh($('endCh').value);
+    var w = parseFloat($('width').value);
+    var err = '';
+    var lo = 0, hi = 0, gross = 0, excl = 0;
+    if ((s !== null && isNaN(s)) || (e !== null && isNaN(e))) err = 'Use chainage like 15+000 or 15.0.';
+    else if (s !== null && e !== null) {
+      lo = Math.min(s, e); hi = Math.max(s, e); gross = hi - lo;
+    }
+    structures.forEach(function (st) {
+      var len = parseFloat(st.len);
+      st._len = isFinite(len) && len > 0 ? len : 0;
+      excl += st._len;
+    });
+    var net = Math.max(0, gross - excl);
+    var area = (isFinite(w) && w > 0) ? net * w : 0;
+    $('rGross').textContent = fmtN(gross, 1) + ' m';
+    $('rExcl').textContent = '− ' + fmtN(excl, 1) + ' m';
+    $('rNet').textContent = fmtN(net, 1) + ' m';
+    $('rArea').textContent = fmtN(area, 1);
+    $('rCh').textContent = gross > 0 ? fmtCh(lo) + ' → ' + fmtCh(hi) : '—';
+    if (!err && gross > 0 && !(isFinite(w) && w > 0)) err = 'Enter a cutting width above 0.';
+    if (!err && gross > 0 && excl > gross) err = 'Excluded length is more than the chainage length.';
+    $('err').hidden = !err; $('err').textContent = err;
+    calc = { ok: !err && gross > 0 && area > 0, lo: lo, hi: hi, gross: gross, excl: excl, net: net, w: w, area: area };
+    $('saveBtn').disabled = !calc.ok;
+  }
+
+  /* Log */
+  function totals() {
+    return entries.reduce(function (t, e) { t.len += e.net; t.area += e.area; return t; }, { len: 0, area: 0 });
+  }
+  function genNo(g) { return String(g || '').replace(/^Generator\s*/i, ''); }
+  function entryLines(e) {
+    var L = [];
+    L.push(e.zone + (e.dtype ? ' (' + e.dtype + ')' : ''));
+    L.push('CH: ' + fmtCh(e.lo) + ' - ' + fmtCh(e.hi) + ' = ' + fmtN(e.net, 1) + ' m');
+    if (e.structures && e.structures.length) L.push('Reduced: ' + e.structures.map(function (s) { return s.name + ', ' + fmtN(s.len, 1) + ' m'; }).join('; '));
+    L.push('Average Width: ' + fmtN(e.w, 1) + ' m');
+    L.push('Working Area: ' + fmtN(e.area, 1) + ' sqm');
+    if (e.gen) L.push('Generator No: ' + genNo(e.gen) + (e.genHrs ? ', Working Duration: ' + fmtN(e.genHrs, 1) + 'h' : ''));
+    if (e.notes) L.push('Remarks: ' + e.notes);
+    return L;
+  }
+  function renderLog() {
+    $('logCount').textContent = entries.length;
+    var t = totals();
+    $('sCount').textContent = entries.length;
+    $('sLen').textContent = fmtN(t.len, 0) + ' m';
+    $('sArea').textContent = fmtN(t.area, 0) + ' sqm';
+    var host = $('logList');
+    if (!entries.length) {
+      host.innerHTML = '<div class="card empty" style="margin:0;font-style:normal">No work logged yet. Save an entry from the Calculator tab and it appears here.</div>';
+      $('logActions').hidden = true; return;
+    }
+    $('logActions').hidden = false;
+    host.innerHTML = entries.map(function (e, i) {
+      return '<div class="entry"><div class="entry-h"><b class="e-date">' + fmtDate(e.date) + '</b>' +
+        '<button class="st-del" type="button" aria-label="Delete entry" data-rm="' + i + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3"/></svg></button></div>' +
+        entryLines(e).map(function (t) { return '<div class="ln">' + esc(t) + '</div>'; }).join('') + '</div>';
+    }).join('');
+    $('tgShare').href = 'https://wa.me/?text=' + encodeURIComponent(report());
+  }
+  function report() {
+    var t = totals();
+    var lines = [];
+    var byDate = {};
+    entries.forEach(function (e) { (byDate[e.date] = byDate[e.date] || []).push(e); });
+    Object.keys(byDate).sort().forEach(function (d) {
+      lines.push('Date: ' + fmtDate(d));
+      byDate[d].forEach(function (e) {
+        lines.push(entryLines(e).join('\n'));
+        lines.push('');
+      });
+      lines.push('');
+    });
+    return lines.join('\n').replace(/\n+$/, '');
+  }
+
+  /* Bridge templates */
+  var TKEY = 'n8-grass-templates-v2', templates = [];
+  /* Built-in templates, always present for the matching Location */
+  var BUILTIN = {
+    'Dhaleshwari': [
+      { name: 'Postogola Bridge', len: 872 }, { name: 'Teghoria IC Bridge', len: 107 },
+      { name: 'Baghoir Bridge', len: 78 }, { name: 'Abdullahpur Bridge', len: 72 },
+      { name: 'Nimtola Bridge', len: 61 }, { name: 'Chaltipara Bridge', len: 36 },
+      { name: 'Hasara Bridge 01', len: 42 }, { name: 'Hasara Bridge 02', len: 66 },
+      { name: 'Umpara Bridge', len: 64 }, { name: 'Kewatkhali Bridge', len: 36 },
+      { name: 'Shologhor Bridge', len: 36 }, { name: 'Chonbari Bridge', len: 58 },
+      { name: 'Srinagar Ferry Ghat Bridge', len: 97 }, { name: 'Dogachi Bridge', len: 65 }
+    ],
+    'Bhanga': [
+      { name: 'Panchar Bridge', len: 76 }, { name: 'Bondorkhola Bridge', len: 55 },
+      { name: 'Bachamara Bridge', len: 86 }, { name: 'Arial kha Bridge', len: 466 },
+      { name: 'Solildiya Bridge', len: 41 }, { name: 'Bamonkanda Bridge', len: 49 },
+      { name: 'Bogail Bridge', len: 97 }, { name: 'Hasamdia Bridge', len: 49 },
+      { name: 'Bhanga IC Bridge', len: 116 }
+    ]
+  };
+  function allTpls() {
+    var b = (BUILTIN[$('loc').value] || []).map(function (t) { return { name: t.name, len: t.len, builtin: true }; });
+    var names = b.map(function (t) { return t.name.toLowerCase(); });
+    return b.concat(templates.filter(function (t) { return names.indexOf(t.name.toLowerCase()) < 0; }));
+  }
+  function loadTpl() {
+    try { var s = localStorage.getItem(TKEY); if (s) templates = JSON.parse(s) || []; } catch (e) { templates = []; }
+  }
+  function persistTpl() { try { localStorage.setItem(TKEY, JSON.stringify(templates)); } catch (e) {} }
+  function saveTpl(name, len) {
+    name = String(name || '').trim(); len = parseFloat(len);
+    if (!name) { toast('Enter a bridge name'); return false; }
+    if (!(isFinite(len) && len > 0)) { toast('Enter a length above 0'); return false; }
+    var i = templates.findIndex(function (t) { return t.name.toLowerCase() === name.toLowerCase(); });
+    if (i >= 0) templates[i].len = len; else templates.push({ name: name, len: len });
+    persistTpl(); renderTemplates(); renderStructures(); compute(); toast('Template saved'); return true;
+  }
+  function renderTemplates() {
+    var all = allTpls();
+    $('tplOptions').innerHTML = all.map(function (t) { return '<option value="' + esc(t.name) + '">' + fmtN(t.len, 1) + ' m</option>'; }).join('');
+    var host = $('tplList');
+    if (!all.length) { host.innerHTML = '<div class="empty">No templates yet. Save a bridge name and length to reuse it.</div>'; return; }
+    host.innerHTML = all.map(function (t, i) {
+      var ui = templates.findIndex(function (x) { return x.name.toLowerCase() === t.name.toLowerCase(); });
+      return '<div class="tpl-item"><div><b>' + esc(t.name) + '</b><small>' + fmtN(t.len, 1) + ' m' + (t.builtin ? ' · built-in' : '') + '</small></div>' +
+        '<button type="button" class="tpl-add" data-use="' + i + '">Add</button>' +
+        (t.builtin ? '<span style="width:42px"></span>' : '<button type="button" class="st-del" aria-label="Delete template" data-trm="' + ui + '"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 12h10l1-12M9 7V4h6v3"/></svg></button>') + '</div>';
+    }).join('');
+  }
+  $('tplSave').onclick = function () { if (saveTpl($('tplName').value, $('tplLen').value)) { $('tplName').value = ''; $('tplLen').value = ''; } };
+  $('tplList').addEventListener('click', function (ev) {
+    var u = ev.target.closest('[data-use]'), d = ev.target.closest('[data-trm]');
+    if (u) { var t = allTpls()[+u.dataset.use]; structures.push({ name: t.name, len: String(t.len) }); renderStructures(); compute(); toast('Added ' + t.name); }
+    else if (d) { templates.splice(+d.dataset.trm, 1); persistTpl(); renderTemplates(); renderStructures(); compute(); toast('Template deleted'); }
+  });
+
+  /* Tabs */
+  function show(which) {
+    ['calc', 'log', 'tpl'].forEach(function (k) {
+      var id = k.charAt(0).toUpperCase() + k.slice(1);
+      $('view' + id).hidden = k !== which;
+      $('tab' + id).setAttribute('aria-selected', k === which);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  /* Events */
+  $('tabCalc').onclick = function () { show('calc'); };
+  $('tabLog').onclick = function () { show('log'); renderLog(); };
+  $('tabTpl').onclick = function () { show('tpl'); };
+  $('helpBtn').onclick = function () { var h = $('help'); h.hidden = !h.hidden; this.setAttribute('aria-expanded', !h.hidden); };
+
+  function syncDate() { var v = $('date').value; $('dateChip').textContent = fmtDate(v); $('reportDate').textContent = 'Report Date: ' + fmtDate(v); }
+  $('date').addEventListener('input', syncDate);
+  $('zone').addEventListener('change', function () { $('routeChip').textContent = 'N8 Express'; });
+  var DIRS = {
+    'Bhanga': ['Bhanga to Panchar', 'Panchar to Bhanga', { group: 'Bhanga IC', items: [
+      'Dhaka to Khulna direction', 'Dhaka to Faridpur direction', 'Dhaka to Barisal direction',
+      'Barisal to Khulna direction', 'Barisal to Faridpur direction', 'Barisal to Dhaka direction',
+      'Khulna to Faridpur direction', 'Khulna to Dhaka direction', 'Khulna to Barisal direction',
+      'Faridpur to Barisal direction', 'Faridpur to Dhaka direction', 'Faridpur to Khulna direction'
+    ] }],
+    'Dhaleshwari': ['Mawa to Dhaka', 'Dhaka to Mawa', { group: 'Teghoria IC', items: [
+      'Dhaleshwari to Babubazar', 'Babubazar to Mawa', 'Babubazar to Dhaka', 'Dhaka to Babubazar'
+    ] }]
+  };
+  function fillZones() {
+    var z = $('zone'), prev = z.value, list = DIRS[$('loc').value] || [], all = [];
+    z.innerHTML = list.map(function (d) {
+      if (typeof d === 'string') { all.push(d); return '<option value="' + d + '">' + d + '</option>'; }
+      return '<optgroup label="' + d.group + '">' + d.items.map(function (it) {
+        var v = d.group + ': ' + it; all.push(v); return '<option value="' + v + '">' + it + '</option>';
+      }).join('') + '</optgroup>';
+    }).join('');
+    if (all.indexOf(prev) >= 0) z.value = prev;
+  }
+  $('loc').addEventListener('change', fillZones);
+  $('loc').addEventListener('change', function () { renderTemplates(); renderStructures(); compute(); });
+  function dirTypeVal() { var v = $('dirType').value; return v === 'Custom' ? ($('dtCustom').value.trim() || 'Custom') : v; }
+  $('dirType').addEventListener('change', function () {
+    var c = this.value === 'Custom'; $('dtCustomWrap').hidden = !c; if (c) $('dtCustom').focus();
+  });
+  ['startCh', 'endCh', 'width'].forEach(function (id) { $(id).addEventListener('input', compute); });
+
+  $('addSt').onclick = function () { structures.push({ name: '', len: '' }); renderStructures(); compute(); var f = $('stList').querySelector('.st-item:last-child input'); if (f) f.focus(); };
+  $('stList').addEventListener('input', function (ev) {
+    var it = ev.target.closest('.st-item'); if (!it || !ev.target.dataset.k) return;
+    var s = structures[+it.dataset.i]; s[ev.target.dataset.k] = ev.target.value;
+    if (ev.target.dataset.k === 'name') {
+      var t = findTpl(s.name), nm = t ? t.name : '';
+      if (t && s._matched !== nm) { s.len = String(t.len); it.querySelector('input[data-k="len"]').value = s.len; }
+      s._matched = nm;
+      it.querySelector('[data-tpl]').hidden = !!t || !String(s.name).trim();
+    }
+    compute();
+  });
+  $('stList').addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-tpl]');
+    if (t) { var s = structures[+t.dataset.tpl]; saveTpl(s.name, s.len); return; }
+    var b = ev.target.closest('[data-del]'); if (!b) return;
+    structures.splice(+b.dataset.del, 1); renderStructures(); compute();
+  });
+
+  $('saveBtn').onclick = function () {
+    if (!calc.ok) return;
+    entries.unshift({
+      id: Date.now(), date: $('date').value, loc: $('loc').value, dtype: dirTypeVal(), gen: $('gen').value, genHrs: parseFloat($('genHrs').value) || 0, zone: $('zone').value, lo: calc.lo, hi: calc.hi, gross: calc.gross,
+      excl: calc.excl, net: calc.net, w: calc.w, area: calc.area, notes: $('notes').value.trim(),
+      structures: structures.filter(function (s) { return s._len > 0; }).map(function (s) { return { name: s.name || 'Structure', len: s._len }; })
+    });
+    persist(); renderLog();
+    $('startCh').value = ''; $('endCh').value = ''; $('notes').value = ''; structures = []; renderStructures(); compute();
+    show('log'); renderLog();
+    toast('Saved to Work Log');
+  };
+  $('logList').addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-rm]'); if (!b) return;
+    entries.splice(+b.dataset.rm, 1); persist(); renderLog(); toast('Entry deleted');
+  });
+  $('copyBtn').onclick = function () {
+    var txt = report();
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast('Report copied'); } catch (e) { toast('Copy not available'); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('Report copied'); }, fallback); else fallback();
+  };
+  $('clearBtn').onclick = function () { $('clearConfirm').hidden = false; };
+  $('clearNo').onclick = function () { $('clearConfirm').hidden = true; };
+  $('clearYes').onclick = function () { entries = []; persist(); $('clearConfirm').hidden = true; renderLog(); toast('Log cleared'); };
+
+  /* Boot */
+  $('date').value = todayISO(); syncDate(); fillZones();
+  load(); loadTpl(); renderStructures(); renderTemplates(); compute(); renderLog();
+})();
+</script>
+
+</html>
